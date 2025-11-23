@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #0078D7;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        main {
+            padding: 1rem;
+        }
+        section {
+            margin-bottom: 2rem;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 1rem;
+            overflow-x: auto;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            background-color: #0078D7;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .sensor-data {
+            font-size: 18px;
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #fff;
+            display: inline-block;
+            min-width: 300px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1> Drone Project</h1>
+</header>
+
+<main>
+    <section>
+        <h2>Control Servos</h2>
+        <button onclick="sendServoCommand('forward')">Move Forward</button>
+        <button onclick="sendServoCommand('reverse')">Move Reverse</button>
+        <button onclick="sendServoCommand('brake')">Brake</button>
+        <button onclick="sendServoCommand('turnLeft')">Turn Left</button>
+        <button onclick="sendServoCommand('turnRight')">Turn Right</button>
+    </section>
+
+    <section>
+        <h2>Sensor Data</h2>
+        <div id="sensorData" class="sensor-data">
+            <p>Distance: <span id="distance">-</span> cm</p>
+            <p>Temperature: <span id="temperature">-</span> °C</p>
+            <p>Humidity: <span id="humidity">-</span> %</p>
+            <p>Pressure: <span id="pressure">-</span> hPa</p>
+        </div>
+        <button onclick="fetchSensorData()">Refresh Sensor Data</button>
+    </section>
+</main>
+
+<footer>
+    <p>Project by Isaac Reiner, Eliezer Kudadjie, Christopher Idrovo and Hamza Shire | &copy; 2024</p>
+</footer>
+
+<script>
+    function sendServoCommand(command) {
+        fetch(`http://<particle-device-address>/v1/devices/<device-id>/servoControl`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer <your-access-token>'
+            },
+            body: JSON.stringify({ arg: command })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(`Servo command: ${command} executed.`);
+        })
+        .catch(error => {
+            alert('Error sending command: ' + error);
+        });
+    }
+
+    function fetchSensorData() {
+        fetch(`http://<particle-device-address>/v1/devices/<device-id>/sensorData`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer <your-access-token>'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('distance').textContent = data.distance || 'N/A';
+            document.getElementById('temperature').textContent = data.temperature || 'N/A';
+            document.getElementById('humidity').textContent = data.humidity || 'N/A';
+            document.getElementById('pressure').textContent = data.pressure || 'N/A';
+        })
+        .catch(error => {
+            alert('Error fetching sensor data: ' + error);
+        });
+    }
+</script>
+
+</body>
+</html>
+
