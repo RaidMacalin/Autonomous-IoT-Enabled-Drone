@@ -1,7 +1,7 @@
 /* 
- * Project myProject
- * Author: Your Name
- * Date: 
+ * Project Autonomous-IoT-Enabled-Drone
+ * Author: Raid Macalin
+ * Date: Nov, 2024
  * For comprehensive documentation and examples, please visit:
  * https://docs.particle.io/firmware/best-practices/firmware-template/
  */
@@ -16,7 +16,7 @@ SYSTEM_MODE(AUTOMATIC);
 SYSTEM_THREAD(ENABLED);
 
 // Show system, cloud connectivity, and application logs over USB
-// View logs with CLI using 'particle serial monitor --follow'
+// View logs with CLI using 'particle serial monitor -- 'follow'
 SerialLogHandler logHandler(LOG_LEVEL_INFO);
 // defining motor and engage pins
 #define motorspeed1 S1
